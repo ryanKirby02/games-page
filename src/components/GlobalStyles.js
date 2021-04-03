@@ -33,7 +33,7 @@ const GlobalStyles = createGlobalStyle`
         color: #696969;
     }
     a {
-        text-direction: none;
+        text-decoration: none;
         color: #333;
     }
     span {

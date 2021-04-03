@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 //api urls
-import { popularGamesURL, upcomingGamesURL, newGamesURL } from '../api';
+import { popularGamesURL, upcomingGamesURL, newGamesURL, gameDetailsURL } from '../api';
 
 export const getPopularGames = () => async (dispatch) => {
   try {
@@ -54,3 +54,21 @@ export const getNewGames = () => async (dispatch) => {
     });
   }
 };
+
+export const getGameDetails = (id) => async (dispatch) => {
+  try {
+    dispatch({
+      type: 'GAME_DETAILS_REQUEST'
+    })
+    const details = await axios.get(gameDetailsURL(id));
+    dispatch({
+      type: 'GAME_DETAILS_SUCCESS',
+      payload: details.data
+    })
+  } catch (error) {
+    dispatch({
+      type: 'GAME_DETAILS_FAIL',
+      payload: error
+    })
+  }
+}
