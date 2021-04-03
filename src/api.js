@@ -1,5 +1,8 @@
+
 //BASE URL
 const base_url = 'https://api.rawg.io/api/';
+//key
+const key = process.env.React_App_API_KEY
 
 //Getting the date for popular games
 const getCurrentMonth = () => {
@@ -20,6 +23,10 @@ const lastYear = `${currentYear - 1}-${currentMonth}-${currentDay}`;
 const nextYear = `${currentYear + 1}-${currentMonth}-${currentDay}`;
 
 //Popular Games
-const popular_games = `games?dates=${lastYear},${currentDate}&ordering=-rating&page_size=10&key=ff354bfb824348b98ad7fca4d0dcc115`;
+const popular_games = `games?dates=${lastYear},${currentDate}&ordering=-rating&page_size=10&key=${key}`;
+const upcoming_games = `games?dates=${currentDate},${nextYear}&ordering=-added&page_size=10&key=${key}`;
+const new_games = `games?dates=${lastYear},${currentDate}&ordering=-released&page_size=10`
 
-export const popularGamesURL = () => `${base_url}${popular_games}`
+export const popularGamesURL = () => `${base_url}${popular_games}`;
+export const upcomingGamesURL = () => `${base_url}${upcoming_games}`
+export const newGamesURL = () => `${base_url}${new_games}`

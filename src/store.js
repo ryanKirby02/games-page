@@ -3,10 +3,12 @@ import thunk from 'redux-thunk';
 import { composeWithDevTools } from 'redux-devtools-extension'
 
 //Reducers
-import { popularGamesReducer } from './reducers/gamesReducer';
+import { popularGamesReducer, upcomingGamesReducer, newGamesReducer } from './reducers/gamesReducer';
 
 const mainReducer = combineReducers({
   popularGames: popularGamesReducer,
+  upcomingGames: upcomingGamesReducer,
+  newGames: newGamesReducer
 });
 
 const middleware = [thunk]
