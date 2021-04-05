@@ -31,3 +31,4 @@ export const popularGamesURL = () => `${base_url}${popular_games}`;
 export const upcomingGamesURL = () => `${base_url}${upcoming_games}`
 export const newGamesURL = () => `${base_url}${new_games}`
 export const gameDetailsURL = (id) => `${base_url}games/${id}`
+export const gameScreenshotsURL = (id) => `${base_url}games/${id}/screenshots?key=${key}`
