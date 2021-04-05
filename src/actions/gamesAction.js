@@ -66,7 +66,7 @@ export const getGameDetails = (id) => async (dispatch) => {
       type: 'GAME_DETAILS_SUCCESS',
       payload: {
         details: detailsData.data,
-        screenshots: screenshotsData.data
+        screenshots: screenshotsData.data.results
       }
     })
   } catch (error) {

@@ -14,6 +14,7 @@ import {
 
 //component imports
 import Game from '../components/Game';
+import GameDetails from '../components/GameDetails';
 
 const Home = () => {
   const dispatch = useDispatch();
@@ -36,7 +37,10 @@ const Home = () => {
 
   return (
     <GameList>
-      <h2><span>Upcoming</span> Games</h2>
+      <GameDetails />
+      <h2>
+        <span>Upcoming</span> Games
+      </h2>
       <Games>
         {upcomingList.map((game) => (
           <Game
@@ -48,7 +52,9 @@ const Home = () => {
           />
         ))}
       </Games>
-      <h2><span>Popular</span> Games</h2>
+      <h2>
+        <span>Popular</span> Games
+      </h2>
       <Games>
         {popularList.map((game) => (
           <Game
@@ -60,7 +66,9 @@ const Home = () => {
           />
         ))}
       </Games>
-      <h2><span>New</span> Games</h2>
+      <h2>
+        <span>New</span> Games
+      </h2>
       <Games>
         {newList.map((game) => (
           <Game
