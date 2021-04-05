@@ -35,7 +35,10 @@ export const newGamesReducer = (state = { newList: [] }, action) => {
   }
 };
 
-export const gameDetailsReducer = (state = {}, action) => {
+export const gameDetailsReducer = (
+  state = { details: {platforms: []}, screenshots: [] },
+  action
+) => {
   switch (action.type) {
     case 'GAME_DETAILS_REQUEST':
       return { loading: true };

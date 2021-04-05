@@ -1,6 +1,8 @@
 import React from 'react';
+import { useHistory } from 'react-router-dom'
 
 //styles and animation
+import '../font_awesome_styles.css';
 import styled from 'styled-components';
 import { motion } from 'framer-motion';
 
@@ -8,41 +10,64 @@ import { motion } from 'framer-motion';
 import { useSelector } from 'react-redux';
 
 const GameDetails = () => {
+  const history = useHistory()
+
   const gameDetails = useSelector((state) => state.gameDetails);
-  const { details, screenshots } = gameDetails;
+  const { loading, details, screenshots } = gameDetails;
+
+  const exitDetailsHandler = (e) => {
+    const element = e.target;
+    if(element.classList.contains('shadow')){
+      document.body.style.overflow = 'auto';
+      history.push('/');
+    }
+  }
 
   return (
-    <CardShadow>
+    <CardShadow className='shadow' onClick={exitDetailsHandler}>
       <Detail>
-        <Stats>
-          <div className='rating'>
-            <h3>{details.name}</h3>
-            <p>Rating: {details.rating}</p>
+        {loading ? (
+          <div className='loadingSpinner'>
+            <div className='spinner'>
+              <i className='fas fa-circle-notch fa-spin fa-5x'></i>
+            </div>
+            <div className='loadingText'>
+              <h1>Loading...</h1>
+            </div>
           </div>
-          <Info>
-            <h3>Platforms</h3>
-            <Platforms>
-              {details.platforms.map((platform) => (
-                <h3 key={platform.platform.id}>{platform.platform.name}</h3>
+        ) : (
+          <>
+            <Stats>
+              <div className='rating'>
+                <h3>{details.name}</h3>
+                <p>Rating: {details.rating}</p>
+              </div>
+              <Info>
+                <h3>Platforms</h3>
+                <Platforms>
+                  {details.platforms.map((platform) => (
+                    <h3 key={platform.platform.id}>{platform.platform.name}</h3>
+                  ))}
+                </Platforms>
+              </Info>
+            </Stats>
+            <Media>
+              <img src={details.background_image} alt={details.name} />
+            </Media>
+            <Description>
+              <p>{details.description_raw}</p>
+            </Description>
+            <Gallery>
+              {screenshots.map((screenshot) => (
+                <img
+                  key={screenshot.id}
+                  src={screenshot.image}
+                  alt='game screenshot'
+                />
               ))}
-            </Platforms>
-          </Info>
-        </Stats>
-        <Media>
-          <img src={details.background_image} alt={details.name} />
-        </Media>
-        <Description>
-          <p>{details.description_raw}</p>
-        </Description>
-        <Gallery>
-          {screenshots.map((screenshot) => (
-            <img
-              key={screenshot.id}
-              src={screenshot.image}
-              alt='game screenshot'
-            />
-          ))}
-        </Gallery>
+            </Gallery>
+          </>
+        )}
       </Detail>
     </CardShadow>
   );
@@ -97,19 +122,19 @@ const Platforms = styled(motion.div)`
   }
 `;
 
-const Media = styled(motion.div)` 
-    margin-top: 5rem;
-    img{
-        width: 100%;
-    }
-`
+const Media = styled(motion.div)`
+  margin-top: 5rem;
+  img {
+    width: 100%;
+  }
+`;
 
-const Description = styled(motion.div)` 
-    margin: 5rem 0rem;
-`
+const Description = styled(motion.div)`
+  margin: 5rem 0rem;
+`;
 
-const Gallery = styled(motion.div)` 
-    margin: 2rem 0rem;
-`
+const Gallery = styled(motion.div)`
+  margin: 2rem 0rem;
+`;
 
 export default GameDetails;

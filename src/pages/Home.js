@@ -1,7 +1,9 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { useLocation } from 'react-router-dom';
 
 //styling and animation
+import '../font_awesome_styles.css'
 import styled from 'styled-components';
 import { motion } from 'framer-motion';
 
@@ -35,52 +37,68 @@ const Home = () => {
   const newGames = useSelector((state) => state.newGames);
   const { loading: newLoading, newList } = newGames;
 
+  const location = useLocation();
+  const pathId = location.pathname.split('/')[2];
+
   return (
-    <GameList>
-      <GameDetails />
-      <h2>
-        <span>Upcoming</span> Games
-      </h2>
-      <Games>
-        {upcomingList.map((game) => (
-          <Game
-            name={game.name}
-            released={game.released}
-            id={game.id}
-            image={game.background_image}
-            key={game.id}
-          />
-        ))}
-      </Games>
-      <h2>
-        <span>Popular</span> Games
-      </h2>
-      <Games>
-        {popularList.map((game) => (
-          <Game
-            name={game.name}
-            released={game.released}
-            id={game.id}
-            image={game.background_image}
-            key={game.id}
-          />
-        ))}
-      </Games>
-      <h2>
-        <span>New</span> Games
-      </h2>
-      <Games>
-        {newList.map((game) => (
-          <Game
-            name={game.name}
-            released={game.released}
-            id={game.id}
-            image={game.background_image}
-            key={game.id}
-          />
-        ))}
-      </Games>
-    </GameList>
+    <>
+      {loading || upcomingLoading || newLoading ? (
+        <div className="loadingSpinner">
+          <div className="spinner">
+          <i className='fas fa-circle-notch fa-spin fa-5x'></i>
+          </div>
+          <div className="loadingText">
+            <h1>Loading...</h1>
+          </div>
+        </div>
+      ) : (
+        <GameList>
+          {pathId && <GameDetails />}
+          <h2>
+            <span>Upcoming</span> Games
+          </h2>
+          <Games>
+            {upcomingList.map((game) => (
+              <Game
+                name={game.name}
+                released={game.released}
+                id={game.id}
+                image={game.background_image}
+                key={game.id}
+              />
+            ))}
+          </Games>
+          <h2>
+            <span>Popular</span> Games
+          </h2>
+          <Games>
+            {popularList.map((game) => (
+              <Game
+                name={game.name}
+                released={game.released}
+                id={game.id}
+                image={game.background_image}
+                key={game.id}
+              />
+            ))}
+          </Games>
+          <h2>
+            <span>New</span> Games
+          </h2>
+          <Games>
+            {newList.map((game) => (
+              <Game
+                name={game.name}
+                released={game.released}
+                id={game.id}
+                image={game.background_image}
+                key={game.id}
+              />
+            ))}
+          </Games>
+        </GameList>
+      )}
+    </>
   );
 };
 

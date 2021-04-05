@@ -1,0 +1,16 @@
+.loadingSpinner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-top: 10rem;
+}
+
+.spinner {
+    color: #ff7676;
+}
+
+.loadingText {
+    padding-top: 1.5rem;
+    margin-bottom: 10rem;
+}

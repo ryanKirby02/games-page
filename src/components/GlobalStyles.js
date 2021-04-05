@@ -41,6 +41,9 @@ const GlobalStyles = createGlobalStyle`
         font-family: 'Abril Fatface', cursive;
         font-weight: lighter;
     }
+    img {
+        display: block;
+    }
 `;
 
 export default GlobalStyles;
