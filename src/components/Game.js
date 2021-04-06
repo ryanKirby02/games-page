@@ -9,6 +9,9 @@ import { motion } from 'framer-motion';
 //actions
 import { getGameDetails } from '../actions/gamesAction';
 
+//utils
+import {getSmallerImage} from '../utils';
+
 const Game = ({ name, released, id, image }) => {
   const dispatch = useDispatch();
 
@@ -22,7 +25,7 @@ const Game = ({ name, released, id, image }) => {
       <Link to={`/game/${id}`}>
         <h3>{name}</h3>
         <p>{released}</p>
-        <img src={image} alt={name} />
+        <img src={getSmallerImage(image, 640)} alt={name} />
       </Link>
     </StyledGame>
   );

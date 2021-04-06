@@ -3,9 +3,11 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useLocation } from 'react-router-dom';
 
 //styling and animation
-import '../font_awesome_styles.css'
+import '../font_awesome_styles.css';
 import styled from 'styled-components';
 import { motion } from 'framer-motion';
+import { pageAnimation, fadeAnim } from '../animation';
+import { useScroll } from '../components/useScroll';
 
 //action imports
 import {
@@ -20,6 +22,9 @@ import GameDetails from '../components/GameDetails';
 
 const Home = () => {
   const dispatch = useDispatch();
+  const [element, controls] = useScroll();
+  const [element2, controls2] = useScroll();
+  const [element3, controls3] = useScroll();
 
   useEffect(() => {
     dispatch(getPopularGames());
@@ -43,59 +48,89 @@ const Home = () => {
   return (
     <>
       {loading || upcomingLoading || newLoading ? (
-        <div className="loadingSpinner">
-          <div className="spinner">
-          <i className='fas fa-circle-notch fa-spin fa-5x'></i>
+        <div className='loadingSpinner'>
+          <div className='spinner'>
+            <i className='fas fa-circle-notch fa-spin fa-5x'></i>
           </div>
-          <div className="loadingText">
+          <div className='loadingText'>
             <h1>Loading...</h1>
           </div>
         </div>
       ) : (
-        <GameList>
-          {pathId && <GameDetails />}
-          <h2>
-            <span>Upcoming</span> Games
-          </h2>
-          <Games>
-            {upcomingList.map((game) => (
-              <Game
-                name={game.name}
-                released={game.released}
-                id={game.id}
-                image={game.background_image}
-                key={game.id}
-              />
-            ))}
-          </Games>
-          <h2>
-            <span>Popular</span> Games
-          </h2>
-          <Games>
-            {popularList.map((game) => (
-              <Game
-                name={game.name}
-                released={game.released}
-                id={game.id}
-                image={game.background_image}
-                key={game.id}
-              />
-            ))}
-          </Games>
-          <h2>
-            <span>New</span> Games
-          </h2>
-          <Games>
-            {newList.map((game) => (
-              <Game
-                name={game.name}
-                released={game.released}
-                id={game.id}
-                image={game.background_image}
-                key={game.id}
-              />
-            ))}
-          </Games>
+        <GameList
+          variants={pageAnimation}
+          initial='hidden'
+          animate='show'
+          exit='exit'>
+          {pathId && (
+            <GameDetails
+              variants={pageAnimation}
+              initial='hidden'
+              animate='show'
+              exit='exit'
+              pathId={pathId}
+            />
+          )}
+          <motion.div
+            variants={fadeAnim}
+            animate={controls}
+            initial='hidden'
+            ref={element}>
+            <h2>
+              <span>Upcoming</span> Games
+            </h2>
+            <Games>
+              {upcomingList.map((game) => (
+                <Game
+                  name={game.name}
+                  released={game.released}
+                  id={game.id}
+                  image={game.background_image}
+                  key={game.id}
+                />
+              ))}
+            </Games>
+          </motion.div>
+          <motion.div
+            variants={fadeAnim}
+            animate={controls2}
+            initial='hidden'
+            ref={element2}>
+            <h2>
+              <span>Popular</span> Games
+            </h2>
+            <Games>
+              {popularList.map((game) => (
+                <Game
+                  name={game.name}
+                  released={game.released}
+                  id={game.id}
+                  image={game.background_image}
+                  key={game.id}
+                />
+              ))}
+            </Games>
+          </motion.div>
+          <motion.div
+            variants={fadeAnim}
+            animate={controls3}
+            initial='hidden'
+            ref={element3}>
+            <h2>
+              <span>New</span> Games
+            </h2>
+            <Games>
+              {newList.map((game) => (
+                <Game
+                  name={game.name}
+                  released={game.released}
+                  id={game.id}
+                  image={game.background_image}
+                  key={game.id}
+                />
+              ))}
+            </Games>
+          </motion.div>
         </GameList>
       )}
     </>

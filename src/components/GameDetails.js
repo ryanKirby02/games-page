@@ -1,31 +1,42 @@
 import React from 'react';
-import { useHistory } from 'react-router-dom'
+import { useHistory } from 'react-router-dom';
 
 //styles and animation
 import '../font_awesome_styles.css';
 import styled from 'styled-components';
 import { motion } from 'framer-motion';
+import { titleAnim, imageAnim, fadeAnim } from '../animation';
 
 //redux
 import { useSelector } from 'react-redux';
 
-const GameDetails = () => {
-  const history = useHistory()
+//utils
+import { getSmallerImage } from '../utils';
+import { useScroll } from './useScroll'
+
+const GameDetails = ({ pathId }) => {
+  const history = useHistory();
+  const [element, controls] = useScroll()
+  const [element2, controls2] = useScroll()
 
   const gameDetails = useSelector((state) => state.gameDetails);
   const { loading, details, screenshots } = gameDetails;
 
   const exitDetailsHandler = (e) => {
     const element = e.target;
-    if(element.classList.contains('shadow')){
+    if (element.classList.contains('shadow')) {
       document.body.style.overflow = 'auto';
       history.push('/');
     }
-  }
+  };
 
   return (
     <CardShadow className='shadow' onClick={exitDetailsHandler}>
-      <Detail>
+      <Detail
+        variants={fadeAnim}
+        initial='hidden'
+        animate='show'
+        exit='exit'>
         {loading ? (
           <div className='loadingSpinner'>
             <div className='spinner'>
@@ -37,7 +48,7 @@ const GameDetails = () => {
           </div>
         ) : (
           <>
-            <Stats>
+            <Stats variants={titleAnim} initial='hidden' animate='show'>
               <div className='rating'>
                 <h3>{details.name}</h3>
                 <p>Rating: {details.rating}</p>
@@ -51,17 +62,20 @@ const GameDetails = () => {
                 </Platforms>
               </Info>
             </Stats>
-            <Media>
-              <img src={details.background_image} alt={details.name} />
+            <Media variants={imageAnim} initial='hidden' animate='show'>
+              <img
+                src={getSmallerImage(details.background_image, 1280)}
+                alt={details.name}
+              />
             </Media>
-            <Description>
+            <Description variants={titleAnim} animate={controls} initial='hidden' ref={element}>
               <p>{details.description_raw}</p>
             </Description>
-            <Gallery>
+            <Gallery variants={fadeAnim} animate={controls2} initial='show' ref={element2}>
               {screenshots.map((screenshot) => (
                 <img
                   key={screenshot.id}
-                  src={screenshot.image}
+                  src={getSmallerImage(screenshot.image, 1280)}
                   alt='game screenshot'
                 />
               ))}
@@ -86,6 +100,7 @@ const CardShadow = styled(motion.div)`
   }
   &::-webkit-scrollbar-thumb {
     background-color: #ff7676;
+    border-radius: 2rem;
   }
   &::-webkit-scrollbar-track {
     background: white;
@@ -108,6 +123,7 @@ const Stats = styled(motion.div)`
   display: flex;
   align-items: center;
   justify-content: space-between;
+  overflow: hidden;
 `;
 
 const Info = styled(motion.div)`
