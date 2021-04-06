@@ -36,6 +36,9 @@ const GameDetails = ({ pathId }) => {
   const gameDetails = useSelector((state) => state.gameDetails);
   const { loading, details, screenshots } = gameDetails;
 
+  const searchGame = useSelector((state) => state.searchGame)
+  const { loading: searchLoading } = searchGame
+
   //handlers and other functions
   const exitDetailsHandler = (e) => {
     const element = e.target;
@@ -46,13 +49,13 @@ const GameDetails = ({ pathId }) => {
   };
   const getPlatformImages = (platform) => {
     switch (platform) {
-      case 'PlayStation 4':
+      case 'PlayStation' || 'PlayStation 5':
         return playstation;
-      case 'Xbox One':
+      case 'Xbox':
         return xbox;
       case 'PC':
         return steam;
-      case 'Nintendo Switch':
+      case 'Nintendo':
         return nintendo;
       case 'iOS':
         return apple;
@@ -73,7 +76,7 @@ const GameDetails = ({ pathId }) => {
   return (
     <CardShadow className='shadow' onClick={exitDetailsHandler}>
       <Detail variants={fadeAnim} initial='hidden' animate='show' exit='exit'>
-        {loading ? (
+        {loading || searchLoading ? (
           <div className='loadingSpinner'>
             <div className='spinner'>
               <i className='fas fa-circle-notch fa-spin fa-5x'></i>
@@ -92,7 +95,7 @@ const GameDetails = ({ pathId }) => {
               <Info>
                 <h3>Platforms</h3>
                 <Platforms>
-                  {details.platforms.map((platform) => (
+                  {details.parent_platforms.map((platform) => (
                     <img
                       key={platform.platform.id}
                       src={getPlatformImages(platform.platform.name)}

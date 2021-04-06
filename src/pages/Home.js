@@ -24,7 +24,14 @@ const Home = () => {
   const dispatch = useDispatch();
   const [element, controls] = useScroll();
   const [element2, controls2] = useScroll();
-  const [element3, controls3] = useScroll();
+
+  //handlers and functions
+  const goBackHandler = (e) => {
+    e.preventDefault();
+    dispatch({
+      type: 'GO_BACK',
+    });
+  };
 
   useEffect(() => {
     dispatch(getPopularGames());
@@ -42,12 +49,15 @@ const Home = () => {
   const newGames = useSelector((state) => state.newGames);
   const { loading: newLoading, newList } = newGames;
 
+  const searchGame = useSelector((state) => state.searchGame);
+  const { loading: searchLoading, searchedGames } = searchGame;
+
   const location = useLocation();
   const pathId = location.pathname.split('/')[2];
 
   return (
     <>
-      {loading || upcomingLoading || newLoading ? (
+      {loading || upcomingLoading || newLoading || searchLoading ? (
         <div className='loadingSpinner'>
           <div className='spinner'>
             <i className='fas fa-circle-notch fa-spin fa-5x'></i>
@@ -56,12 +66,11 @@ const Home = () => {
             <h1>Loading...</h1>
           </div>
         </div>
-      ) : (
+      ) : !searchedGames.length ? (
         <GameList
           variants={pageAnimation}
           initial='hidden'
-          animate='show'
-          exit='exit'>
+          animate='show'>
           {pathId && (
             <GameDetails
               variants={pageAnimation}
@@ -71,11 +80,7 @@ const Home = () => {
               pathId={pathId}
             />
           )}
-          <motion.div
-            variants={fadeAnim}
-            animate={controls}
-            initial='hidden'
-            ref={element}>
+          <motion.div>
             <h2>
               <span>Upcoming</span> Games
             </h2>
@@ -93,9 +98,9 @@ const Home = () => {
           </motion.div>
           <motion.div
             variants={fadeAnim}
-            animate={controls2}
+            animate={controls}
             initial='hidden'
-            ref={element2}>
+            ref={element}>
             <h2>
               <span>Popular</span> Games
             </h2>
@@ -113,14 +118,52 @@ const Home = () => {
           </motion.div>
           <motion.div
             variants={fadeAnim}
-            animate={controls3}
+            animate={controls2}
             initial='hidden'
-            ref={element3}>
+            ref={element2}>
             <h2>
               <span>New</span> Games
             </h2>
             <Games>
               {newList.map((game) => (
+                <Game
+                  name={game.name}
+                  released={game.released}
+                  id={game.id}
+                  image={game.background_image}
+                  key={game.id}
+                />
+              ))}
+            </Games>
+          </motion.div>
+        </GameList>
+      ) : (
+        <GameList
+          variants={pageAnimation}
+          initial='hidden'
+          animate='show'
+          exit='exit'>
+          {pathId && (
+            <GameDetails
+              variants={pageAnimation}
+              initial='hidden'
+              animate='show'
+              exit='exit'
+              pathId={pathId}
+            />
+          )}
+          <motion.div>
+            <button onClick={goBackHandler} type='submit'>
+              Back
+            </button>
+
+            <Header>
+              <h2>
+                <span>Searched</span> Games
+              </h2>
+            </Header>
+            <Games>
+              {searchedGames.map((game) => (
                 <Game
                   name={game.name}
                   released={game.released}
@@ -142,6 +185,21 @@ const GameList = styled(motion.div)`
   h2 {
     padding: 5rem 0rem;
   }
+  button {
+    border-radius: 1.5rem;
+    padding: 0.5rem 2rem;
+    font-size: 1.5rem;
+    border: none;
+    cursor: pointer;
+    background: #ff7676;
+    color: white;
+    outline: none;
+    transition: 0.2s;
+  }
+  button:hover {
+    transform: scale(1.1);
+    box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.3);
+  }
 `;
 
 const Games = styled(motion.div)`
@@ -150,6 +208,10 @@ const Games = styled(motion.div)`
   grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
   grid-column-gap: 3rem;
   grid-row-gap: 5rem;
+`;
+
+const Header = styled.div`
+  display: flex;
 `;
 
 export default Home;

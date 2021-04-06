@@ -16,7 +16,7 @@ const App = () => {
     <div className='App'>
       <Nav />
       <AnimatePresence exitBeforeEnter>
-        <GlobalStyles />
+        <GlobalStyles key='1' />
         <Route path={['/game/:id', '/']} component={Home} />
       </AnimatePresence>
     </div>

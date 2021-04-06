@@ -1,21 +1,44 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 //animations and styles
 import styled from 'styled-components';
 import { motion } from 'framer-motion';
 import logo from '../img/logo.svg';
 
+//redux and routes
+import { getSearchedGames } from '../actions/gamesAction';
+import { useDispatch } from 'react-redux';
+
 const Nav = () => {
+  //utils
+  const dispatch = useDispatch();
+
+  //state
+  const [userInput, setUserInput] = useState('');
+
+  //handlers and functions
+  const searchSubmitHandler = (e) => {
+    e.preventDefault();
+    dispatch(getSearchedGames(userInput));
+    setUserInput('')
+  };
   return (
     <StyledNav>
       <Logo>
         <img src={logo} alt='logo' />
         <h1>Flair</h1>
       </Logo>
-      <div className='search'>
-        <input type='text' placeholder='Search' />
-        <button>Search</button>
-      </div>
+      <form className='search'>
+        <input
+          value={userInput}
+          type='text'
+          placeholder='Search'
+          onChange={(e) => setUserInput(e.target.value)}
+        />
+        <button type='submit' onClick={searchSubmitHandler}>
+          Search
+        </button>
+      </form>
     </StyledNav>
   );
 };
@@ -40,6 +63,7 @@ const StyledNav = styled(motion.nav)`
     cursor: pointer;
     background: #ff7676;
     color: white;
+    outline: none;
     transition: 0.3s;
   }
   button:hover {

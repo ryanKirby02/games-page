@@ -1,7 +1,14 @@
 import axios from 'axios';
 
 //api urls
-import { popularGamesURL, upcomingGamesURL, newGamesURL, gameDetailsURL, gameScreenshotsURL } from '../api';
+import {
+  popularGamesURL,
+  upcomingGamesURL,
+  newGamesURL,
+  gameDetailsURL,
+  gameScreenshotsURL,
+  searchedGameURL,
+} from '../api';
 
 export const getPopularGames = () => async (dispatch) => {
   try {
@@ -58,21 +65,45 @@ export const getNewGames = () => async (dispatch) => {
 export const getGameDetails = (id) => async (dispatch) => {
   try {
     dispatch({
-      type: 'GAME_DETAILS_REQUEST'
-    })
+      type: 'GAME_DETAILS_REQUEST',
+    });
     const detailsData = await axios.get(gameDetailsURL(id));
     const screenshotsData = await axios.get(gameScreenshotsURL(id));
     dispatch({
       type: 'GAME_DETAILS_SUCCESS',
       payload: {
         details: detailsData.data,
-        screenshots: screenshotsData.data.results
-      }
-    })
+        screenshots: screenshotsData.data.results,
+      },
+    });
   } catch (error) {
     dispatch({
       type: 'GAME_DETAILS_FAIL',
+      payload: error,
+    });
+  }
+};
+
+export const getSearchedGames = (gameName) => async (dispatch) => {
+  try {
+    dispatch({
+      type: 'GAME_SEARCH_REQUEST',
+    });
+    const searchData = await axios.get(searchedGameURL(gameName))
+    dispatch({
+      type: 'GAME_SEARCH_SUCCESS',
+      payload: searchData.data.results
+    })
+  } catch (error) {
+    dispatch({
+      type: 'GAME_SEARCH_FAIL',
       payload: error
     })
   }
+};
+
+export const goBack = () => async (dispatch) => {
+  dispatch({
+    type: 'GO_BACK'
+  })
 }

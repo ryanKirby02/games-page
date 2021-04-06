@@ -54,3 +54,18 @@ export const gameDetailsReducer = (
       return state;
   }
 };
+
+export const searchGameReducer = (state = {searchedGames: []}, action) => {
+  switch (action.type) {
+    case 'GAME_SEARCH_REQUEST':
+        return { loading: true }
+    case 'GAME_SEARCH_SUCCESS':
+      return { loading: false, searchedGames: action.payload }
+    case 'GAME_SEARCH_FAIL':
+      return { loading: false, error: action.payload }
+    case 'GO_BACK':
+      return { searchedGames: [] }
+    default:
+      return state;
+  }
+}
